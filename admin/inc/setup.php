@@ -1,14 +1,30 @@
 <?PHP
 	use Database as DB;
 
-	if ($admin_created !== false) die();
+	//if ($admin_created !== false) die();
+
+  function recurse_copy($src, $dst) { 
+    $dir = opendir($src); 
+    @mkdir($dst); 
+    while(false !== ( $file = readdir($dir)) ) { 
+        if (( $file != '.' ) && ( $file != '..' )) { 
+            if ( is_dir($src . '/' . $file) ) { 
+                recurse_copy($src . '/' . $file,$dst . '/' . $file); 
+            } 
+            else { 
+                copy($src . '/' . $file,$dst . '/' . $file); 
+            } 
+        } 
+    } 
+    closedir($dir); 
+  }
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>OpenFANTASY - Create Administrator Account</title>
+    <title>OpenFANTASY - Create Application</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
@@ -53,12 +69,28 @@
   </head>
 
   <body>
-	
     <div class="container">		
     	<form class="form-signin" method="POST">
     	<?PHP
-		if (isset($_POST['username']) && isset($_POST['password']) && isset($_POST['email']) && filter_var($_POST['email'], FILTER_VALIDATE_EMAIL))
+  
+      function filter_alpha($value) {
+        return filter_var($value, FILTER_VALIDATE_REGEXP, array('options' => array('regexp' => "/^[a-zA-Z0-9]+$/")));
+      }
+ 
+
+
+
+		if (isset($_POST['username']) && isset($_POST['password']) && isset($_POST['email']) && filter_var($_POST['email'], FILTER_VALIDATE_EMAIL) && filter_alpha($_POST['username']))
 		{
+          $appname = $_POST['username'];
+          $_SESSION['namespace'] = $appname;
+
+          $sql = file_get_contents('../install/openfantasy.sql');
+          $sql = str_replace('{NAMESPACE}', $appname, $sql);
+          $pdo = $pdo->getMaster();
+          $qr = $pdo->exec($sql);
+
+
 	        $db = DB::instance();
 	        $id = $db->insert('users', array(
 	            'username' => $_POST['username'],
@@ -67,9 +99,25 @@
 	            'userlevel' => 10,
 	            'created' => time()
 	        ));
+          #throw new Exception($db->getErrorMessage());
 
-	        $_SESSION['adminID'] = $id;
+          $localSecret = 'openfantasy_is_best_2013'; // move this into config.
+
+          $appKey = sha1(sha1($localSecret .'username'. $_POST['username']));
+          $appSecret = sha1(sha1($localSecret .'password'. $_POST['password']));
+
+          $db->insert('apps', array(
+              'appKey' => $appKey,
+              'appSecret' => $appSecret,
+              'email' => $_POST['email'],
+              'namespace' => $_POST['username']
+          ));
+
+          $_SESSION['adminID'] = $id;
+
+
 	        // todo: use the API for the above later.
+          recurse_copy('../core/Modules', '../apps/'.$appKey.$appSecret.'/');
 
 			echo "<h3>Account {$_POST['username']} created!</h3>";
 			echo "<p>Thanks! At this point you're free to start managing your instance of OpenFANTASY.</p><p>You can start making a connection to your API and test calls right away. If you need help or would like some sample code, please visit our forums at <a href='http://openfantasy.org'>http://openfantasy.org</a>.</p>";
@@ -80,22 +128,37 @@
 		{
     	?>
 	        <h2 class="form-signin-heading">OpenFANTASY</h2>
-	        <h3>Create Administrator Account</h3>
-	        <p>OK, so we lied. There's just one more step - create your account and you'll be able to start managing your instance of OpenFANTASY right away!</p>
-	        <input type="text" name="username" class="input-block-level" style="margin-top:8px"  placeholder="Username">
+	        <h3>Create Application</h3>
+	        <input type="text" name="username" class="input-block-level" style="margin-top:8px" value="<?PHP echo isset($_POST['username']) ? $_POST['username'] : '' ?>" placeholder="Application Namespace">
 	        <input type="password" name="password" class="input-block-level" placeholder="Password">
-	        <input type="text" name="email" class="input-block-level" placeholder="Email">
+	        <input type="text" name="email" class="input-block-level" value="<?PHP echo isset($_POST['email']) ? $_POST['email'] : '' ?>" placeholder="Email">
+
+
 	        <?PHP
+          //cleeean this up
 	        if (isset($_POST['email']) && !filter_var($_POST['email'], FILTER_VALIDATE_EMAIL))
 	        {
-	        	?>
+	        ?>
 	        	<div class="alert alert-error">
-			    <button type="button" class="close" data-dismiss="alert">&times;</button>
-			    Invalid Email.
-			    </div>
+  			    <button type="button" class="close" data-dismiss="alert">&times;</button>
+  			    Invalid Email.
+  			    </div>
 			    <?PHP
 	        }
 	        ?>
+
+          <?PHP
+          if (isset($_POST['username']) && !filter_alpha($_POST['username']))
+          {
+          ?>
+            <div class="alert alert-error">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            Invalid Namespace.
+            </div>
+          <?PHP
+          }
+          ?>
+
 	        
 	        <button style="margin-top:8px" class="input-block-level btn btn-large btn-primary" type="submit">Create Account</button>
 	      

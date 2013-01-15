@@ -1,16 +1,24 @@
 <?PHP
 	use Database as DB;
 
+    $fail = false;
     if (isset($_POST['username']) && isset($_POST['password']))
     {
+      $namespace = addslashes($_POST['username']);
+
       $db = DB::instance();
-      $data = $db->select('users', array('username' => $_POST['username']), 1);
+      $data = $db->select($namespace.'_users', array('username' => $_POST['username']), 1);
       
       if (count($data) > 0 && md5($_POST['password']) === $data['password'] && $data['userlevel'] == 10)
       {
         $_SESSION['adminID'] = $data['userID'];
+        $_SESSION['namespace'] = $_POST['username'];
         $admin_path = 'http://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['REQUEST_URI']);
         header("Location: $admin_path") ;
+      }
+      else
+      {
+        $fail = true;
       }
     }
 ?>
@@ -69,9 +77,21 @@
     	<form class="form-signin" method="POST">
 	        <h2 class="form-signin-heading">OpenFANTASY</h2>
 	        <h3>Login to Control Panel</h3>
-	        <input type="text" name="username" class="input-block-level" style="margin-top:8px"  placeholder="Username">
+	        <input type="text" name="username" class="input-block-level" style="margin-top:8px"  placeholder="Application Name">
 	        <input type="password" name="password" class="input-block-level" placeholder="Password">
+          <?PHP
+          if ($fail == true) { 
+          ?>
+            <div class="alert alert-error">
+              <button type="button" class="close" data-dismiss="alert">&times;</button>
+              <h4>Login Failed</h4>
+              Invalid Application Name or Password.
+            </div>
+          <?PHP
+          }
+          ?>
 	        <button style="margin-top:8px" class="input-block-level btn btn-large btn-primary" type="submit">Login</button>
+          <center><a href="<?PHP echo OF_PATH ?>admin/index.php?setup">Set up a new application</a></center>
 		  </form>
     </div>
 

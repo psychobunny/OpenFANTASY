@@ -234,7 +234,8 @@ class Database {
 	 * method getMaster.
 	 * 	- grab the PDO connection to the master DB
 	 */
-	protected function getMaster() {
+	// changed from protected for OF.
+	public function getMaster() {
 		// if we have not been configured, use hard coded values
 		if (!isset($this->config_master)) {
 			$this->config_master = array(
@@ -319,6 +320,7 @@ class Database {
 	 */
 	public function select($table, $params = null, $limit = null, $start = null, $order_by=null, $use_master = false) {
 		// building query string
+		$table = ($table != 'apps' && isset($_SESSION['namespace'])) ? $_SESSION['namespace'] . '_' . $table : $table;
 		$sql_str = "SELECT * FROM $table";
 		// append WHERE if necessary
 		$sql_str .= ( count($params)>0 ? ' WHERE ' : '' );
@@ -513,6 +515,8 @@ class Database {
 	 * @return int|bool - the amount of rows updated, false on failure
 	 */
 	public function update($table, $params, $wheres=array(), $timestamp_this=null) {
+		$table = ($table != 'apps' && isset($_SESSION['namespace'])) ? $_SESSION['namespace'] . '_' . $table : $table;
+
 		if (is_null($timestamp_this)) {
 			$timestamp_this = self::$TIMESTAMP_WRITES;
 		}
@@ -598,6 +602,8 @@ class Database {
 	 * @return mixed - new primary key of inserted table, false on failure
 	 */
 	public function insert($table, $params = array(), $timestamp_this = null) {
+		$table = ($table != 'apps' && isset($_SESSION['namespace'])) ? $_SESSION['namespace'] . '_' . $table : $table;
+
 		if (is_null($timestamp_this)) {
 			$timestamp_this = self::$TIMESTAMP_WRITES;
 		}

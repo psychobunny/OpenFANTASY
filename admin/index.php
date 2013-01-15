@@ -19,8 +19,8 @@ $admin_created = (count($data)) ? true : false;
 
 if (!$admin_created)
 {
-	include 'inc/setup.php';
-	die();
+	//include 'inc/setup.php';
+	//die();
 }
 
 if (isset($_GET['logout']))
@@ -44,6 +44,12 @@ function is_admin()
 	else return $data;
 }
 
+
+if(isset($_GET['setup']))
+{
+	include 'inc/setup.php';
+	die();	
+}
 
 if (!is_admin())
 {

@@ -85,4 +85,6 @@ function constructAdminFooter($module) {
 		<p>Always make sure your modules are up to date. Go <a href='$url'>here</a> to check for the latest version.<br />
 		If you have any issues, suggestions, or improvements please visit the module's <a href='$url'>forum thread</a> and post your concerns.</p>";
 }
+
+
 ?>

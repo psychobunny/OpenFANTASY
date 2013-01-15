@@ -26,8 +26,8 @@ SET time_zone = "+00:00";
 -- Table structure for table `analytics`
 --
 
-DROP TABLE IF EXISTS `analytics`;
-CREATE TABLE IF NOT EXISTS `analytics` (
+# DROP TABLE IF EXISTS `analytics`;
+CREATE TABLE IF NOT EXISTS `{NAMESPACE}_{NAMESPACE}_analytics` (
   `metric` varchar(255) NOT NULL,
   `handle` varchar(255) NOT NULL,
   `value` bigint(10) NOT NULL,
@@ -41,8 +41,8 @@ CREATE TABLE IF NOT EXISTS `analytics` (
 -- Table structure for table `analytics_warehouse`
 --
 
-DROP TABLE IF EXISTS `analytics_warehouse`;
-CREATE TABLE IF NOT EXISTS `analytics_warehouse` (
+# DROP TABLE IF EXISTS `analytics_warehouse`;
+CREATE TABLE IF NOT EXISTS `{NAMESPACE}_analytics_warehouse` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `metric` varchar(255) NOT NULL,
   `handle` varchar(255) NOT NULL,
@@ -58,8 +58,8 @@ CREATE TABLE IF NOT EXISTS `analytics_warehouse` (
 -- Table structure for table `facebook`
 --
 
-DROP TABLE IF EXISTS `facebook`;
-CREATE TABLE IF NOT EXISTS `facebook` (
+# DROP TABLE IF EXISTS `facebook`;
+CREATE TABLE IF NOT EXISTS `{NAMESPACE}_facebook` (
   `userID` int(10) unsigned NOT NULL,
   `facebookID` bigint(20) unsigned NOT NULL,
   PRIMARY KEY (`userID`)
@@ -71,8 +71,8 @@ CREATE TABLE IF NOT EXISTS `facebook` (
 -- Table structure for table `users`
 --
 
-DROP TABLE IF EXISTS `users`;
-CREATE TABLE IF NOT EXISTS `users` (
+# DROP TABLE IF EXISTS `users`;
+CREATE TABLE IF NOT EXISTS `{NAMESPACE}_users` (
   `userID` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `username` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,

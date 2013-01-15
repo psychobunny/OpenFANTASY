@@ -1,6 +1,9 @@
 <?PHP
   if (!is_admin()) die('Not Authorized.');
-  
+
+  $appInfo = $db->select('apps', array(      
+      'namespace' => $_SESSION['namespace']
+  ), 1);
 ?>
 
 <div class="span9">
@@ -16,4 +19,9 @@
       <a href="http://openfantasy.org/forum/viewforum.php?f=3" class="btn btn-primary btn-large" target="_blank">Customize &raquo;</a>
     </p>
   </div>    
+
+
+  Use these when making API calls.<br />
+  App Key: <?PHP echo $appInfo['appKey']; ?><br />
+  App Secret: <?PHP echo $appInfo['appSecret']; ?>
 </div><!--/span-->
