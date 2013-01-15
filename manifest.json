@@ -1,0 +1,3 @@
+{
+	"modules" : ["User", "User/Admin", "Tools", "HelloWorld", "Social"]
+}

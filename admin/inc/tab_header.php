@@ -4,14 +4,8 @@
 	$modulePath = $_GET['module'];	
 
 	$tabs = array('home.php');
-	if ($handle = opendir("../core/Modules/$modulePath/tabs")) {
-	    while (false !== ($entry = readdir($handle))) {
-	        if (stristr($entry, '.php') && $entry != "Admin.php" && $entry != "home.php") {
-	            array_push($tabs, $entry);
-	        }
-	    }
-	    closedir($handle);
-	}
+
+	$tabs = array_merge($tabs, get_tabs($modulePath));	
 	
 	$selectedtab = (isset($_GET['tab'])) ? strtolower($_GET['tab']) : 'home';
 ?>
@@ -32,6 +26,10 @@
 
 <?PHP	
 	include("../core/Modules/$modulePath/tabs/$selectedtab.php");
+	if ($selectedtab == "home")
+	{
+		constructAdminFooter($modulePath);
+	}
 
 
 ?>

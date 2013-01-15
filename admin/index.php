@@ -9,6 +9,7 @@ if (!file_exists('../config.inc.php'))
 }
 
 require ('../config.inc.php');
+require ('admin_functions.php');
 
 
 $db = DB::instance();

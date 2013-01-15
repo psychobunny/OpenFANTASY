@@ -4,16 +4,15 @@ session_start();
 require_once '../core/API/Autoloader.php';
 require_once '../config.inc.php';
 
-//todo: create manifest file and load modules from there.
+$manifest = json_decode(file_get_contents('../manifest.json'), true);
+
+$modulesToLoad = array();
+foreach ($manifest['modules'] as $module) {
+    array_push($modulesToLoad, '../core/Modules/' . $module . '/*.php');
+}
+
 $config = array(
-    'load' => array(
-        '../*.php',
-        '../core/Modules/User/*.php',
-        '../core/Modules/User/Admin/*.php',
-        '../core/Modules/Tools/*.php',
-        '../core/Modules/HelloWorld/*.php',
-        '../core/Modules/Social/*.php'
-    )
+    'load' => $modulesToLoad
 );
 
 $app = new API\Application($config);

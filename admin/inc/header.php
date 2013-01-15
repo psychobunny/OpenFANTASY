@@ -1,34 +1,9 @@
 <?PHP
   $admin = is_admin();
   if (!$admin) die('Not Authorized.');
-  $username = $admin['username'];
-
-
-  $module_basepath = '../core/Modules';  
-
-  $modules = array();
-
-
-  function getDirectories($path) {
-    global $modules, $module_basepath;
-
-    $results = scandir($path);
-
-    foreach ($results as $result) {
-        if ($result === '.' or $result === '..') continue;
-
-        if (is_dir($path . '/' . $result)) {
-          getDirectories($path . '/' . $result); // move this inside later
-            if (file_exists($path . '/' . $result . '/settings/settings.json'))
-            {              
-              array_push($modules, str_replace($module_basepath .'/', '', $path . '/' . $result));
-            }
-
-        }
-    }    
-  }
+  $username = $admin['username'];  
   
-  getDirectories($module_basepath);
+  $modules = get_modules($module_basepath);
 
   $pages = array(
       'Home' => 'icon-home',
