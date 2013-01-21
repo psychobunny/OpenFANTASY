@@ -24,8 +24,9 @@
     	?>
     </ul>
 
-<?PHP	
-	include("../core/Modules/$modulePath/tabs/$selectedtab.php");
+<?PHP
+	$basePath = get_module_basepath();
+	include("$basePath/$modulePath/tabs/$selectedtab.php");
 	if ($selectedtab == "home")
 	{
 		constructAdminFooter($modulePath);

@@ -1,0 +1,14 @@
+{
+    "appID": {
+        "type": "text",
+        "name": "Facebook App ID",
+        "description": "Go to http://developers.facebook.com, register your app and retrieve the App ID from your application's main page",
+        "value": "447849518603781"
+    },
+    "appSecret": {
+        "type": "text",
+        "name": "Facebook App Secret",
+        "description": "Go to http://developers.facebook.com, register your app and retrieve the App Secret from your application's main page",
+        "value": "79a6a3a620b690b323553f8f953a58e0"
+    }
+}

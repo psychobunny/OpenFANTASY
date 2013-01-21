@@ -79,12 +79,17 @@
  
 
 
+    if (isset($_POST['username']))
+    {
+      $appname = $_POST['username'];
+      $_SESSION['namespace'] = $appname;
 
-		if (isset($_POST['username']) && isset($_POST['password']) && isset($_POST['email']) && filter_var($_POST['email'], FILTER_VALIDATE_EMAIL) && filter_alpha($_POST['username']))
+      $exists = $db->select('apps', array(
+          'namespace' => $appname
+      ));
+    }
+		if (isset($_POST['username']) && isset($_POST['password']) && isset($_POST['email']) && filter_var($_POST['email'], FILTER_VALIDATE_EMAIL) && filter_alpha($_POST['username']) && count($exists)==0)
 		{
-          $appname = $_POST['username'];
-          $_SESSION['namespace'] = $appname;
-
           $sql = file_get_contents('../install/openfantasy.sql');
           $sql = str_replace('{NAMESPACE}', $appname, $sql);
           $pdo = $pdo->getMaster();
@@ -154,6 +159,18 @@
             <div class="alert alert-error">
             <button type="button" class="close" data-dismiss="alert">&times;</button>
             Invalid Namespace.
+            </div>
+          <?PHP
+          }
+          ?>
+
+          <?PHP
+          if (isset($_POST['username']) && count($exists) > 0)
+          {
+          ?>
+            <div class="alert alert-error">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            Application Namespace already exists.
             </div>
           <?PHP
           }

@@ -1,32 +1,38 @@
 <?php
 session_start();
 
+header("Access-Control-Allow-Origin: *"); 
+
 require_once '../core/API/Autoloader.php';
 require_once '../config.inc.php';
 
 
-if ((!isset($_GET['appKey']) || !isset($_GET['appSecret'])) && (!isset($_SESSION['appKey']) || !isset($_SESSION['appSecret'])))
+if ((!isset($_REQUEST['appKey']) || !isset($_REQUEST['appSecret'])) && (!isset($_SESSION['appKey']) || !isset($_SESSION['appSecret'])))
 {
 	die('Invalid appKey or appSecret.');
 }
 
-if (isset($_GET['appKey']) && isset($_GET['appSecret']))
+if (isset($_REQUEST['appKey']) && isset($_REQUEST['appSecret'])) //dev
 {
-	$appKey = $_GET['appKey'];
-	$appSecret = $_GET['appSecret'];
+	$appKey = $_REQUEST['appKey'];
+	$appSecret = $_REQUEST['appSecret'];
 
 	$_SESSION['appKey'] = $appKey;
 	$_SESSION['appSecret'] = $appSecret;
+}
+else
+{
+    $appKey = $_SESSION['appKey'];
+    $appSecret = $_SESSION['appSecret'];
 }
 
 
 $namespace = $appKey . $appSecret;
 
-$manifest = json_decode(file_get_contents('../manifest.json'), true);
+$manifest = json_decode(file_get_contents("../apps/$namespace/manifest.json"), true);
 
 $modulesToLoad = array();
 foreach ($manifest['modules'] as $module) {
-    //array_push($modulesToLoad, '../core/Modules/' . $module . '/*.php');
     array_push($modulesToLoad, "../apps/$namespace/" . $module . '/*.php');
 }
 

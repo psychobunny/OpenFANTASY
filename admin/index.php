@@ -57,6 +57,7 @@ if (!is_admin())
 	die();
 }
 
+
 include 'inc/header.php';
 
 $page = (isset($_GET['page'])) ? strtolower($_GET['page']) : 'home';

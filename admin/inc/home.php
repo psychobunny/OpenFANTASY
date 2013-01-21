@@ -4,6 +4,10 @@
   $appInfo = $db->select('apps', array(      
       'namespace' => $_SESSION['namespace']
   ), 1);
+  $_SESSION['appKey'] = $appInfo['appKey'];
+  $_SESSION['appSecret'] = $appInfo['appSecret'];
+
+  $_SESSION['appPath'] = '../apps/' . $appInfo['appKey'] . $appInfo['appSecret'] . '/';
 ?>
 
 <div class="span9">
@@ -20,8 +24,9 @@
     </p>
   </div>    
 
-
-  Use these when making API calls.<br />
-  App Key: <?PHP echo $appInfo['appKey']; ?><br />
-  App Secret: <?PHP echo $appInfo['appSecret']; ?>
+  <div class="well">
+    <h4>Use these when making API calls.</h4>
+    <strong>App Key</strong>: <?PHP echo $appInfo['appKey']; ?><br />
+    <strong>App Secret</strong>: <?PHP echo $appInfo['appSecret']; ?>
+  </div>
 </div><!--/span-->

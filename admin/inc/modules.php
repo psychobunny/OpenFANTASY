@@ -12,7 +12,7 @@
 <div class='span9'>
 	<h1>Uninstalled Modules</h1>
 	<?PHP	
-		$modules = get_modules(null, UNINSTALLED);
+		$modules = get_modules(null, UNINSTALLED_MODULES);
 		$module_basepath = get_module_basepath();
 
 		echo '<ul class="nav nav-pills">';

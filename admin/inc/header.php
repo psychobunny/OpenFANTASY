@@ -3,6 +3,7 @@
   if (!$admin) die('Not Authorized.');
   $username = $admin['username'];  
   
+  $module_basepath = get_module_basepath();
   $modules = get_modules($module_basepath);
 
   $pages = array(
