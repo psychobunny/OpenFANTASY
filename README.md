@@ -2,7 +2,7 @@ See http://openfantasy.org for more details
 Please come and say hi at the forums: http://openfantasy.org/forums
 
 
-Latest Release Thread: http://openfantasy.org/forum/viewtopic.php?f=4&t=2&sid=926050dd8e44b1a59bff62187f423b7b
+Latest Release Thread: http://openfantasy.org/forum/viewtopic.php?f=4&t=2
 
 
 
