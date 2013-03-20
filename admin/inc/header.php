@@ -3,7 +3,7 @@
   if (!$admin) die('Not Authorized.');
   $username = $admin['username'];  
   
-  $modules = get_modules($module_basepath);
+  $modules = get_modules($module_basepath, 'INSTALLED');
 
   $pages = array(
       'Home' => 'icon-home',
