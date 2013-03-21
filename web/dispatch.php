@@ -1,5 +1,6 @@
 <?php
 session_start();
+header("Access-Control-Allow-Origin: *");
 
 require_once '../core/API/Autoloader.php';
 require_once '../config.inc.php';

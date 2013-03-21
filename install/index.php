@@ -88,8 +88,7 @@ const OF_PATH = "{OF_PATH}";
 
 $pdo = Database::instance();
 $pdo->configMaster("{HOST}", "{DBNAME}", "{USER}", "{PASSWORD}");
-?>
-			';
+?>';
 
 			$config = str_replace("{OF_PATH}", $of_path, $config);
 			$config = str_replace("{HOST}", $_POST['host'], $config);
